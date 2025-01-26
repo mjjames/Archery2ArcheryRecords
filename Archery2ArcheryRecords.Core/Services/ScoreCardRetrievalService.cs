@@ -4,8 +4,13 @@ using FluentResults;
 
 namespace Archery2ArcheryRecords.Core.Services;
 
-public class ScoreCardRetrievalService : IScoreCardRetrievalService
+public class ScoreCardRetrievalService(Func<FileBase, Task<Stream>> getFileStream) : IScoreCardRetrievalService
 {
+    public ScoreCardRetrievalService(): this(f => f.OpenReadAsync())
+    {
+        
+    }
+
     public async IAsyncEnumerable<Result<RawPDF>> LoadFiles(IEnumerable<FileBase> files)
     {
         foreach (var file in files)
@@ -22,7 +27,7 @@ public class ScoreCardRetrievalService : IScoreCardRetrievalService
         }
         try
         {
-            return Result.Ok(new RawPDF(file.FileName, await file.OpenReadAsync()));
+            return Result.Ok(new RawPDF(file.FileName, await getFileStream(file)));
         }
         catch (Exception ex)
         {

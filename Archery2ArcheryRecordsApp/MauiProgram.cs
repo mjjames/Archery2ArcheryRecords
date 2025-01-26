@@ -29,6 +29,7 @@ public static class MauiProgram
     
     public static MauiAppBuilder RegisterServices(this MauiAppBuilder mauiAppBuilder)
     {
+        mauiAppBuilder.Services.AddSingleton(FilePicker.Default);
         mauiAppBuilder.Services.AddTransient<IScoreCardParserService, ScoreCardParserService>();
         mauiAppBuilder.Services.AddTransient<IScoreCardRetrievalService, ScoreCardRetrievalService>();
         mauiAppBuilder.Services.AddTransient<ScoreCardProcessorService>();
